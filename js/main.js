@@ -16,9 +16,7 @@ function generateDeck(){
 
     fetch(url)
         .then(res => res.json()) // parse response as JSON
-        .then(data => {
-            deckID = data.deck_id;
-        })
+        .then(data => deckID = data.deck_id)
         .catch(err => {
             console.log(`error: ${err}`);
         });
@@ -34,44 +32,47 @@ function drawCards(){
         .then(data => {
             console.log(data);
             let player1 = convertValue(data.cards[0]);
-            player1Card.src = player1.image;
-            console.log(player1.value)
             let player2 = convertValue(data.cards[1]);
-            player2Card.src = player2.image;
-            console.log(player2.value)
 
-            if(player1.value > player2.value){
-                lblResult.innerText = 'Winner is: Player 1';
-            }
-            else if(player1.value < player2.value){
-                lblResult.innerText = 'Winner is: Player 2';
-            }
-            else {
-                lblResult.innerText = 'WARRRRRR';
-            }
+            player1Card.src = player1.image;
+            player2Card.src = player2.image;
+
+            lblResult.innerText = checkWinner(player1, player2);
         })
         .catch(err => {
             console.log(`error: ${err}`);
         });
+}
 
-    function convertValue(player){
-        if(player.value.toLowerCase() === 'ace' ){
-            player.value = 14;
-        }
-        else if (player.value.toLowerCase() === 'king'){
-            player.value = 13;
-        }
-        else if (player.value.toLowerCase() === 'queen'){
-            player.value = 12;
-        }
-        else if (player.value.toLowerCase() === 'jack'){
-            player.value = 11;
-        }
-        else{
-            player.value = Number(player.value)
-        }
-        return player;
+function convertValue(player){
+    if(player.value.toLowerCase() === 'ace' ){
+        player.value = 14;
     }
+    else if (player.value.toLowerCase() === 'king'){
+        player.value = 13;
+    }
+    else if (player.value.toLowerCase() === 'queen'){
+        player.value = 12;
+    }
+    else if (player.value.toLowerCase() === 'jack'){
+        player.value = 11;
+    }
+    else{
+        player.value = Number(player.value)
+    }
+    return player;
 }
 
 
+function checkWinner(player1, player2){
+
+    if(player1.value > player2.value){
+        return 'Winner is: Player 1';
+    }
+    else if(player1.value < player2.value){
+        return 'Winner is: Player 2';
+    }
+    else {
+        return 'WARRRRRR';
+    }
+}
